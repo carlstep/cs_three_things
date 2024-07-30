@@ -1,3 +1,4 @@
+import 'package:cs_three_things/base/resources/app_styles.dart';
 import 'package:cs_three_things/base/utils/app_routes.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
@@ -28,24 +29,30 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Three Things'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.addTaskScreen);
-              },
-              icon: const Icon(
-                FluentSystemIcons.ic_fluent_add_circle_regular,
-                size: 30,
-              ))
-        ],
+        title: Text(
+          'Three Things',
+          style: AppStyles.headlineStyle1,
+        ),
+        // 'add' action will not appear on stats screen (index - 2)
+        actions: _selectedIndex == 2
+            ? null
+            : [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.addTaskScreen);
+                    },
+                    icon: const Icon(
+                      FluentSystemIcons.ic_fluent_add_circle_regular,
+                      size: 30,
+                    ))
+              ],
       ),
       body: appScreens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _onItemTapped,
         currentIndex: _selectedIndex,
-        unselectedItemColor: Colors.blueGrey,
-        selectedItemColor: Colors.red,
+        unselectedItemColor: AppStyles.unselectedIconColor,
+        selectedItemColor: AppStyles.selectedIconColor,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         iconSize: 34,

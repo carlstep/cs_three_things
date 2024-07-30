@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'base/bottom_nav_bar.dart';
 import 'base/utils/app_routes.dart';
-import 'screens/add_task_screen.dart';
+import 'screens/add_task/add_task_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -15,9 +15,11 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Three Things',
-      // theme: ThemeData(),
+      theme: ThemeData(),
       routes: {
+        // navigate to AppRoutes.homeScreen
         AppRoutes.homeScreen: (context) => const BottomNavBar(),
+        // navigate to AppRoutes.addTaskScreen
         AppRoutes.addTaskScreen: (context) => const AddTaskScreen(),
       },
     );
