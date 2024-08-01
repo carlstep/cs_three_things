@@ -2,11 +2,9 @@ import 'package:cs_three_things/base/resources/app_styles.dart';
 import 'package:cs_three_things/screens/add_task/widgets/priority_item_widget.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
-
 import 'package:intl/intl.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
-import '../../base/utils/app_routes.dart';
 import '../../base/utils/config.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -30,6 +28,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   // TextFieldTags
   late StringTagController _stringTagController;
   late double _distanceToField;
+  int maxTagLimit = 3;
 
   // task Priority
   int selectedPriority = 0;
@@ -51,6 +50,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _stringTagController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -65,15 +70,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           key: _taskFormKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // TASK NAME section
-              Text(
-                'Task Name...',
-                style: AppStyles.textLabelStyle2,
-              ),
               TextFormField(
                 cursorHeight: 22,
-                textAlignVertical: TextAlignVertical.center,
+                textAlignVertical: TextAlignVertical.bottom,
                 controller: taskNameController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -83,6 +85,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 },
                 style: AppStyles.textInputStyle1,
                 decoration: InputDecoration(
+                  label: const Text('Task Name'),
                   hintText: 'enter a task name',
                   hintStyle: AppStyles.textHintStyle,
                   border: OutlineInputBorder(
@@ -100,13 +103,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
+
               // TASK NOTE section
-              Text(
-                'Task Note...',
-                style: AppStyles.textLabelStyle2,
-              ),
               SizedBox(
                 height: height,
                 child: TextFormField(
@@ -119,6 +119,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     return null;
                   },
                   decoration: InputDecoration(
+                    label: const Text('Task Note'),
                     hintText: 'enter a description',
                     hintStyle: AppStyles.textHintStyle,
                     border: OutlineInputBorder(
@@ -137,8 +138,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
+              // TASK DUEDATE -
+              // TODO - change showDatePicker color style
               Container(
                 decoration: BoxDecoration(
                     border: Border.all(color: AppStyles.unselectedIconColor),
@@ -156,6 +159,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     IconButton(
                       onPressed: () async {
                         DateTime? picked = await showDatePicker(
+                          helpText: 'Select Task Due Date',
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(2020),
@@ -178,133 +182,137 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 height: 20,
               ),
 
+              // TASK TAGS
+              // TODO - tag field label acts strange
               TextFieldTags<String>(
-                  textfieldTagsController: _stringTagController,
-                  initialTags: const [],
-                  textSeparators: const [' ', ','],
-                  letterCase: LetterCase.normal,
-                  validator: (String tag) {
-                    print('validator ${_stringTagController.getTags}');
-                    if (tag.isEmpty) {
-                      return 'Enter your tags...';
-                    }
-                    return null;
-                  },
-                  inputFieldBuilder: (context, inputFieldValues) {
-                    return TextField(
-                      onTap: () {
-                        _stringTagController.getFocusNode?.requestFocus();
-                      },
-                      controller: inputFieldValues.textEditingController,
-                      focusNode: inputFieldValues.focusNode,
-                      decoration: InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        isDense: false,
-                        // design for border
-                        border: OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                          borderSide: AppStyles.inputBorderStyle,
+                textfieldTagsController: _stringTagController,
+                initialTags: const [],
+                textSeparators: const [' ', ','],
+                letterCase: LetterCase.normal,
+                validator: (String tag) {
+                  print('validator ${_stringTagController.getTags}');
+                  if (tag.isEmpty) {
+                    return 'Enter your tags...';
+                  }
+                  if (_stringTagController.getTags!.length >= maxTagLimit) {
+                    return 'Only $maxTagLimit tags allowed';
+                  }
+                  return null;
+                },
+                inputFieldBuilder: (context, inputFieldValues) {
+                  return TextField(
+                    onTap: () {
+                      _stringTagController.getFocusNode?.requestFocus();
+                    },
+                    controller: inputFieldValues.textEditingController,
+                    focusNode: inputFieldValues.focusNode,
+                    decoration: InputDecoration(
+                      isDense: false,
+                      // design for border
+                      border: OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(15),
                         ),
-                        // design for border if active
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                          borderSide: AppStyles.focusedBorderStyle,
-                        ),
-
-                        label: const Text(
-                          'Three Tags',
-                          softWrap: false,
-                          overflow: TextOverflow.visible,
-                        ),
-                        labelStyle: AppStyles.textHintStyle,
-                        hintText: inputFieldValues.tags.isNotEmpty
-                            ? ''
-                            : "Enter tag/s...",
-                        hintStyle: AppStyles.textHintStyle,
-                        errorText: inputFieldValues.error,
-                        prefixIconConstraints:
-                            BoxConstraints(maxWidth: _distanceToField * 0.8),
-                        prefixIcon: inputFieldValues.tags.isNotEmpty
-                            ? SingleChildScrollView(
-                                controller:
-                                    inputFieldValues.tagScrollController,
-                                scrollDirection: Axis.vertical,
-                                child: Padding(
-                                  // padding of whole container
-                                  padding: const EdgeInsets.only(
-                                      top: 8, bottom: 8, left: 5),
-                                  child: Wrap(
-                                    runSpacing: 0.0,
-                                    spacing: 2.0,
-                                    children:
-                                        inputFieldValues.tags.map((String tag) {
-                                      // TODO - limit number of tags to 3
-                                      print(tag);
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(15.0),
-                                          ),
-                                          color: Colors.blueGrey.shade400,
-                                        ),
-                                        // margin around each tag
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 3.0, vertical: 8),
-                                        // padding inside each tag
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 4.0, vertical: 5.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            InkWell(
-                                              child: Text(
-                                                '#$tag',
-                                                style: AppStyles
-                                                    .textTagInputStyle3
-                                                    .copyWith(
-                                                        color: Colors.white),
-                                              ),
-                                              onTap: () {
-                                                print("$tag selected");
-                                              },
-                                            ),
-                                            const SizedBox(width: 5.0),
-                                            InkWell(
-                                              child: const Icon(
-                                                Icons.cancel,
-                                                size: 18.0,
-                                                color: Color.fromARGB(
-                                                    255, 239, 234, 234),
-                                              ),
-                                              onTap: () {
-                                                inputFieldValues
-                                                    .onTagRemoved(tag);
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              )
-                            : null,
+                        borderSide: AppStyles.inputBorderStyle,
                       ),
-                      onChanged: inputFieldValues.onTagChanged,
-                      onSubmitted: inputFieldValues.onTagSubmitted,
-                    );
-                  }),
-              const SizedBox(
-                height: 10,
+                      // design for border if active
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        borderSide: AppStyles.focusedBorderStyle,
+                      ),
+                      floatingLabelAlignment: FloatingLabelAlignment.start,
+                      labelText: 'Task Tags',
+                      // label: const Text(
+                      //   'Task Tags',
+                      //   softWrap: true,
+                      //   overflow: TextOverflow.visible,
+                      // ),
+                      labelStyle: AppStyles.textHintStyle,
+                      hintText: inputFieldValues.tags.isNotEmpty
+                          ? ''
+                          : "Enter tag/s...",
+                      hintStyle: AppStyles.textHintStyle,
+                      errorText: inputFieldValues.error,
+                      prefixIconConstraints:
+                          BoxConstraints(maxWidth: _distanceToField * 0.8),
+                      prefixIcon: inputFieldValues.tags.isNotEmpty
+                          ? SingleChildScrollView(
+                              controller: inputFieldValues.tagScrollController,
+                              scrollDirection: Axis.vertical,
+                              child: Padding(
+                                // padding of whole container
+                                padding: const EdgeInsets.only(
+                                    top: 8, bottom: 8, left: 5),
+                                child: Wrap(
+                                  runSpacing: 0.0,
+                                  spacing: 2.0,
+                                  children:
+                                      inputFieldValues.tags.map((String tag) {
+                                    print(tag);
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(15.0),
+                                        ),
+                                        color: Colors.blueGrey.shade400,
+                                      ),
+                                      // margin around each tag
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 3.0, vertical: 8),
+                                      // padding inside each tag
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0, vertical: 5.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          InkWell(
+                                            child: Text(
+                                              '#$tag',
+                                              style: AppStyles
+                                                  .textTagInputStyle3
+                                                  .copyWith(
+                                                      color: Colors.white),
+                                            ),
+                                            onTap: () {
+                                              print("$tag selected");
+                                            },
+                                          ),
+                                          const SizedBox(width: 5.0),
+                                          InkWell(
+                                            child: const Icon(
+                                              Icons.cancel,
+                                              size: 18.0,
+                                              color: Color.fromARGB(
+                                                  255, 239, 234, 234),
+                                            ),
+                                            onTap: () {
+                                              inputFieldValues
+                                                  .onTagRemoved(tag);
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    onChanged: inputFieldValues.onTagChanged,
+                    onSubmitted: inputFieldValues.onTagSubmitted,
+                  );
+                },
               ),
-              const Text('Task Priority...'),
-              // Task Priority and task Area
+
+              const SizedBox(
+                height: 20,
+              ),
+              // TASK PRIORITY AND AREA
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -338,8 +346,29 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   const SizedBox(
                     width: 10,
                   ),
+                  // TODO - setup user can add new area
                   DropdownMenu<String>(
-                      width: 180,
+                      menuStyle: const MenuStyle(
+                        side: MaterialStatePropertyAll<BorderSide?>(
+                          BorderSide(width: 0.25),
+                        ),
+                        elevation: MaterialStatePropertyAll(0),
+                        shadowColor: MaterialStatePropertyAll(Colors.white),
+                      ),
+                      inputDecorationTheme: InputDecorationTheme(
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                            borderSide: AppStyles.focusedBorderStyle,
+                          ),
+                          contentPadding: const EdgeInsets.all(5)),
+                      width: 200,
                       initialSelection: areas.first['area'],
                       controller: areaMenuController,
                       requestFocusOnTap: true,
@@ -352,17 +381,21 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       },
                       dropdownMenuEntries: areas.map((area) {
                         return DropdownMenuEntry<String>(
-                            value: area['area'],
-                            label: area['area'],
-                            leadingIcon: area['icon'],
-                            style: MenuItemButton.styleFrom(
-                                backgroundColor: Colors.white));
+                          value: area['area'],
+                          label: area['area'],
+                          leadingIcon: area['icon'],
+                          style: MenuItemButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              textStyle: AppStyles.textLabelStyle1),
+                        );
                       }).toList()),
                 ],
               ),
 
-              const SizedBox(
-                height: 40,
+              const Expanded(
+                child: SizedBox(
+                  height: 40,
+                ),
               ),
 
               // Add New Task Button

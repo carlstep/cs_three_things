@@ -1,3 +1,4 @@
+import 'package:cs_three_things/base/resources/app_styles.dart';
 import 'package:flutter/material.dart';
 
 import 'base/bottom_nav_bar.dart';
@@ -15,10 +16,12 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Three Things',
-      theme: ThemeData(),
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
       routes: {
         // navigate to AppRoutes.homeScreen
-        AppRoutes.homeScreen: (context) => const BottomNavBar(),
+        AppRoutes.focusScreen: (context) => const BottomNavBar(),
         // navigate to AppRoutes.addTaskScreen
         AppRoutes.addTaskScreen: (context) => const AddTaskScreen(),
       },

@@ -26,7 +26,7 @@ class AppStyles {
   static TextStyle textInputStyle1 =
       const TextStyle(fontSize: 22, fontWeight: FontWeight.w300, height: 0.8);
   static TextStyle textInputStyle2 =
-      const TextStyle(fontSize: 18, fontWeight: FontWeight.w300, height: 0.8);
+      const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, height: 0.8);
   static TextStyle textTagInputStyle3 =
       const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, height: 0.8);
 

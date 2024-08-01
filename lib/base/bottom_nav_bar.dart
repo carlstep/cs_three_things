@@ -12,7 +12,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   final appScreens = [
-    const Center(child: Text('home screen')),
+    const Center(child: Text('focus screen')),
     const Center(child: Text('inbox screen')),
     const Center(child: Text('stats screen')),
   ];
@@ -60,7 +60,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           BottomNavigationBarItem(
               label: 'home',
               icon: Icon(
-                FluentSystemIcons.ic_fluent_home_regular,
+                FluentSystemIcons.ic_fluent_target_regular,
               )),
           BottomNavigationBarItem(
               label: 'inbox',
