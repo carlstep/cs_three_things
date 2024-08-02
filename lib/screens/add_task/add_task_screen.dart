@@ -1,8 +1,8 @@
 import 'package:cs_three_things/base/resources/app_styles.dart';
+import 'package:cs_three_things/screens/add_task/widgets/due_date_input.dart';
 import 'package:cs_three_things/screens/add_task/widgets/priority_item_widget.dart';
-import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:textfield_tags/textfield_tags.dart';
 
 import '../../base/utils/config.dart';
@@ -24,7 +24,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   // variable to display height of taskNote field
   final height = 160.00;
   // dueDate
-  DateTime? selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now();
   // TextFieldTags
   late StringTagController _stringTagController;
   late double _distanceToField;
@@ -141,43 +141,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 height: 20,
               ),
               // TASK DUEDATE -
-              // TODO - change showDatePicker color style
-              Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: AppStyles.unselectedIconColor),
-                    borderRadius: BorderRadius.circular(15)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        DateFormat('EEEE, d MMMM yyyy').format(selectedDate!),
-                        style: AppStyles.textInputStyle2,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        DateTime? picked = await showDatePicker(
-                          helpText: 'Select Task Due Date',
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2100),
-                        );
-                        if (picked != null) {
-                          selectedDate = picked;
-                          setState(() {});
-                        }
-                      },
-                      icon: const Icon(
-                        FluentSystemIcons.ic_fluent_calendar_month_regular,
-                        size: 34,
-                      ),
-                    )
-                  ],
-                ),
+              // TODO - understand the refactoring, and comment
+              DueDateInput(
+                onDateSelected: (date) => setState(() {
+                  selectedDate = date;
+                }),
+                selectedDate: selectedDate,
               ),
+
               const SizedBox(
                 height: 20,
               ),
