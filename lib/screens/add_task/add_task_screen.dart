@@ -140,9 +140,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               const SizedBox(
                 height: 20,
               ),
+
               // TASK DUEDATE -
-              // TODO - understand the refactoring, and comment
+              // DueDateInput is a custom widget. It handles the selection of a new dueDate for the task.
+              // it also handles the styling of the widget.
               DueDateInput(
+                // onDateSelected is the callback function passed to DueDateInput, it's invoked when a new dueDate is selected
+                // onDateSelected requires a (date). In setState,the (date) is passed to selectedDate, selectedDate: selectedDate holds
+                // today's date until a new selectedDate is passed.
+                /*
+                How it Works
+                  - When the DueDateInput widget is built, it displays the current selectedDate.
+                  - If the user taps the calendar icon, a date picker dialog appears.
+                  - Once the user selects a new date, the onDateSelected callback is triggered.
+                  - Inside the callback, setState is called to update the selectedDate state with the newly selected date.
+                  - This triggers a rebuild of the widget, reflecting the updated selectedDate. 
+                */
                 onDateSelected: (date) => setState(() {
                   selectedDate = date;
                 }),
@@ -195,11 +208,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       ),
                       floatingLabelAlignment: FloatingLabelAlignment.start,
                       labelText: 'Task Tags',
-                      // label: const Text(
-                      //   'Task Tags',
-                      //   softWrap: true,
-                      //   overflow: TextOverflow.visible,
-                      // ),
                       labelStyle: AppStyles.textHintStyle,
                       hintText: inputFieldValues.tags.isNotEmpty
                           ? ''
@@ -373,7 +381,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
                     fixedSize: Size(MediaQuery.of(context).size.width * 1, 50)),
-                onPressed: () {},
+                onPressed: () {
+                  addTask();
+                },
                 child: Text(
                   'Add New Task',
                   style: AppStyles.textLabelStyle2,
@@ -387,5 +397,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         ),
       ),
     );
+  }
+
+  void addTask() {
+    print(taskNameController.text);
+    print(taskNoteController.text);
+    print(selectedDate);
+    print(_stringTagController.getTags);
+    print(priorities[selectedPriority]['name']);
+    print(selectedArea);
   }
 }
