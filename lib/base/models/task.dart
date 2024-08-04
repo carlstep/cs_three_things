@@ -23,7 +23,6 @@ class Task {
   final String taskArea;
 
   Task({
-    required this.id,
     required this.taskName,
     required this.taskNote,
     required this.dueDate,

@@ -103,13 +103,13 @@ Task _taskDeserialize(
 ) {
   final object = Task(
     dueDate: reader.readDateTime(offsets[0]),
-    id: id,
     taskArea: reader.readString(offsets[1]),
     taskName: reader.readString(offsets[2]),
     taskNote: reader.readString(offsets[3]),
     taskPriority: reader.readLong(offsets[4]),
     taskTags: reader.readStringList(offsets[5]) ?? [],
   );
+  object.id = id;
   return object;
 }
 

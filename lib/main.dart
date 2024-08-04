@@ -1,11 +1,23 @@
+import 'package:cs_three_things/base/database/task_database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'base/bottom_nav_bar.dart';
 import 'base/utils/app_routes.dart';
 import 'screens/add_task/add_task_screen.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // initialize db
+  await TaskDatabase.initialize();
+
+  runApp(
+    // Provider state management
+    ChangeNotifierProvider(
+      create: (context) => TaskDatabase(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {

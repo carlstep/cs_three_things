@@ -1,7 +1,10 @@
+import 'package:cs_three_things/base/database/task_database.dart';
+import 'package:cs_three_things/base/models/task.dart';
 import 'package:cs_three_things/base/resources/app_styles.dart';
 import 'package:cs_three_things/screens/add_task/widgets/due_date_input.dart';
 import 'package:cs_three_things/screens/add_task/widgets/priority_item_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:textfield_tags/textfield_tags.dart';
 
@@ -45,6 +48,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   @override
   void initState() {
+    Provider.of<TaskDatabase>(context, listen: false).readTasks();
     super.initState();
     _stringTagController = StringTagController();
   }
@@ -399,7 +403,32 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     );
   }
 
-  void addTask() {
+  void addTask() async {
+    // only want to add task if taskName is not empty
+
+    if (taskNameController.text.isNotEmpty) {
+      // return to home screen
+      Navigator.pop(context);
+
+      // create new instance of task
+      Task newTask = Task(
+        taskName: taskNameController.text,
+        taskNote: taskNoteController.text,
+        dueDate: selectedDate,
+        taskTags: _stringTagController.getTags!,
+        taskPriority: selectedPriority,
+        taskArea: selectedArea!,
+      );
+
+      // add new task to db
+      await context.read<TaskDatabase>().createNewTask(newTask);
+
+      // clear controllers
+      taskNameController.clear();
+      taskNoteController.clear();
+      _stringTagController.clearTags();
+    }
+
     print(taskNameController.text);
     print(taskNoteController.text);
     print(selectedDate);
