@@ -403,14 +403,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     );
   }
 
-  void addTask() async {
-    // only want to add task if taskName is not empty
+  /*
+  This function handles adding a new task to the application. It performs the following actions:
+    - Checks if the task name is provided. 
+    - Navigates back if the task name is provided.
+    - Creates a new Task object with user-provided details.
+    - Saves the new task to a database (asynchronous).
+    - Clears the input fields for a new task.
+  */
 
+  void addTask() async {
+    // only can add task if taskName is not empty
     if (taskNameController.text.isNotEmpty) {
       // return to home screen
       Navigator.pop(context);
 
-      // create new instance of task
+      // create new instance of task and pass thru the values
       Task newTask = Task(
         taskName: taskNameController.text,
         taskNote: taskNoteController.text,
@@ -428,12 +436,5 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       taskNoteController.clear();
       _stringTagController.clearTags();
     }
-
-    print(taskNameController.text);
-    print(taskNoteController.text);
-    print(selectedDate);
-    print(_stringTagController.getTags);
-    print(priorities[selectedPriority]['name']);
-    print(selectedArea);
   }
 }

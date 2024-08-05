@@ -5,9 +5,12 @@ import 'package:isar/isar.dart';
 // run cmd in termainl >> dart run build_runner build
 part 'task.g.dart';
 
+// task class, not the id is not required
+// to add a new task, see addTask() function in add_task_screen
+
 @Collection()
 class Task {
-  // unique task id
+  // unique task id >> comes from isar
   Id id = Isar.autoIncrement;
   // task name
   final String taskName;

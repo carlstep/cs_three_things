@@ -5,12 +5,19 @@ import 'package:path_provider/path_provider.dart';
 import '../models/task.dart';
 
 class TaskDatabase extends ChangeNotifier {
+  // TaskDatabase class, that inherits from ChangeNotifier
+
   static late Isar isar;
+  // declares a static late variable 'isar', which holds the reference to the Isar database
 
   List<Task> _allTasks = [];
+  // _allTasks is a private list. Stores all Task objects from the Isar db
 
   // SETUP
   // - initialize db
+  // static method named initialize() is async and used to setup the Isar db.
+  // it retrieves the application documents directory path and opens an Isar instance
+  // with [TaskSchema]
   static Future<void> initialize() async {
     final dir = await getApplicationDocumentsDirectory();
     isar = await Isar.open(
