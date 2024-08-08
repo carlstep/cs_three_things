@@ -178,7 +178,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 textSeparators: const [' ', ','],
                 letterCase: LetterCase.normal,
                 validator: (String tag) {
-                  print('validator ${_stringTagController.getTags}');
                   if (tag.isEmpty) {
                     return 'Enter your tags...';
                   }
@@ -233,7 +232,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                   spacing: 2.0,
                                   children:
                                       inputFieldValues.tags.map((String tag) {
-                                    print(tag);
                                     return Container(
                                       decoration: BoxDecoration(
                                         borderRadius: const BorderRadius.all(
@@ -359,7 +357,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       onSelected: (String? newValue) {
                         setState(() {
                           selectedArea = newValue;
-                          print(selectedArea);
                         });
                       },
                       dropdownMenuEntries: areas.map((area) {

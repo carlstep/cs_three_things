@@ -22,6 +22,14 @@ class AppStyles {
   static TextStyle textHintStyle =
       const TextStyle(fontSize: 18, fontWeight: FontWeight.w400);
 
+  // text tile fonts
+  static TextStyle textTileStyle1 =
+      const TextStyle(fontSize: 18, fontWeight: FontWeight.w700);
+  static TextStyle textTileStyle2 =
+      const TextStyle(fontSize: 16, fontWeight: FontWeight.w700);
+  static TextStyle textTileChipStyle2 =
+      const TextStyle(fontSize: 14, fontWeight: FontWeight.w400);
+
   // - text input
   static TextStyle textInputStyle1 =
       const TextStyle(fontSize: 22, fontWeight: FontWeight.w300, height: 0.8);
