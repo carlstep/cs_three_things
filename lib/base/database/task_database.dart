@@ -33,7 +33,21 @@ class TaskDatabase extends ChangeNotifier {
   // OPERATIONS
 
   // - create new task
-  Future<void> createNewTask(Task newTask) async {
+  Future<void> createNewTask(
+    String taskName,
+    String taskNote,
+    DateTime dueDate,
+    List<String> taskTags,
+    PriorityEnum taskPriority,
+    String taskArea,
+  ) async {
+    final newTask = Task()
+      ..taskName = taskName
+      ..taskNote = taskNote
+      ..dueDate = dueDate
+      ..taskTags = taskTags
+      ..taskPriority = taskPriority
+      ..taskArea = taskArea;
     // add to db
     await isar.writeTxn(() => isar.tasks.put(newTask));
 
@@ -45,6 +59,8 @@ class TaskDatabase extends ChangeNotifier {
         print(task.taskPriority);
       }
     }
+
+    printTasks();
   }
 
   // - read tasks

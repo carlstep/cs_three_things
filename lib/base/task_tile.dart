@@ -29,6 +29,12 @@ class _TaskTileState extends State<TaskTile> {
   // bool private variable to expand the tile
   bool _isExpanded = false;
 
+  // priority indicator
+  Map<String, dynamic>? _findPriorityConfig(String priorityName) {
+    return priorities
+        .firstWhere((priority) => priority['name'] == priorityName);
+  }
+
   @override
   void initState() {
     Provider.of<TaskDatabase>(context, listen: false).readTasks();
@@ -52,12 +58,15 @@ class _TaskTileState extends State<TaskTile> {
             color: Colors.grey.shade900,
           ),
         ),
+        // elevation set to 0
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Row to display the taskName and taskPriority indicator
+              // this Row displays main task information
               Row(
                 // crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,9 +75,20 @@ class _TaskTileState extends State<TaskTile> {
                     widget.task.taskName,
                     style: AppStyles.textTileStyle1,
                   ),
-                  CircleAvatar(
-                    backgroundColor: Colors.red.shade300,
-                    radius: 15,
+                  // TODO - work on the priority indicator
+                  // priority indicator
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: _findPriorityConfig(
+                            widget.task.taskPriority?.name ?? '')?['color'],
+                        radius: 15,
+                        child: Text(
+                          _findPriorityConfig(
+                              widget.task.taskPriority?.name ?? '')?['icon'],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -145,19 +165,6 @@ class _TaskTileState extends State<TaskTile> {
                               ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              OutlinedButton.icon(
-                                onPressed: () {},
-                                icon: const Icon(Icons.edit),
-                                label: const Text('edit'),
-                              ),
-                            ],
-                          )
                         ],
                       )
                     : null,
@@ -167,6 +174,5 @@ class _TaskTileState extends State<TaskTile> {
         ),
       ),
     );
-    ;
   }
 }

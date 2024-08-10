@@ -1,6 +1,7 @@
 import 'package:cs_three_things/base/database/task_database.dart';
 import 'package:cs_three_things/base/resources/app_styles.dart';
 import 'package:cs_three_things/base/task_tile.dart';
+import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -29,21 +30,39 @@ class _InboxScreenState extends State<InboxScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final taskDatabase = context.watch<TaskDatabase>();
+    // final taskDatabase = context.watch<TaskDatabase>();
 
-    List<Task> taskList = taskDatabase.allTasks;
+    // List<Task> taskList = taskDatabase.allTasks;
 
     return Consumer<TaskDatabase>(
       builder: (context, value, child) => ListView.builder(
         itemCount: value.allTasks.length,
         itemBuilder: (context, index) {
           Task eachTask = value.allTasks[index];
+          // slidable function >> delete >> edit >> share >> focus
           return Slidable(
-            endActionPane: ActionPane(
+            startActionPane: ActionPane(
+              extentRatio: 0.3,
               motion: const ScrollMotion(),
               children: [
+                // mark task for focus screen
                 SlidableAction(
-                    icon: Icons.delete,
+                  padding: const EdgeInsets.all(0),
+                  spacing: 0,
+                  onPressed: null,
+                  icon: FluentSystemIcons.ic_fluent_target_regular,
+                  foregroundColor: AppStyles.unselectedIconColor,
+                )
+              ],
+            ),
+            endActionPane: ActionPane(
+              extentRatio: 0.5,
+              motion: const ScrollMotion(),
+              children: [
+                // delete function >> showDialog with task info and confirm to delete
+                SlidableAction(
+                    icon: FluentSystemIcons.ic_fluent_delete_regular,
+                    foregroundColor: AppStyles.unselectedIconColor,
                     onPressed: (context) {
                       showDialog(
                         context: context,
@@ -61,23 +80,34 @@ class _InboxScreenState extends State<InboxScreen> {
                             ],
                           ),
                           actions: [
+                            // delete button
                             TextButton(
                               onPressed: () {
                                 deleteTask(eachTask.id);
                                 Navigator.pop(context);
                               },
                               child: const Text('Delete'),
-                            )
+                            ),
+                            // cancel button
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel'),
+                            ),
                           ],
                         ),
                       );
                     }),
-                const SlidableAction(
-                  icon: Icons.edit,
+                // edit task function
+                SlidableAction(
+                  icon: FluentSystemIcons.ic_fluent_edit_regular,
+                  foregroundColor: AppStyles.unselectedIconColor,
                   onPressed: null,
                 ),
-                const SlidableAction(
-                  icon: Icons.share,
+                SlidableAction(
+                  icon: FluentSystemIcons.ic_fluent_share_ios_regular,
+                  foregroundColor: AppStyles.unselectedIconColor,
                   onPressed: null,
                 ),
               ],

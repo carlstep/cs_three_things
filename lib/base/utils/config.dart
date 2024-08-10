@@ -1,10 +1,25 @@
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 
-const List<Map<String, dynamic>> priorities = [
-  {'name': 'low', 'icon': '!', 'color': Colors.green, 'selected': false},
-  {'name': 'medium', 'icon': '!!', 'color': Colors.orange, 'selected': false},
-  {'name': 'high', 'icon': '!!!', 'color': Colors.red, 'selected': false},
+List<Map<String, dynamic>> priorities = [
+  {
+    'name': 'low',
+    'icon': '!',
+    'color': Colors.green.shade300,
+    'selected': false
+  },
+  {
+    'name': 'medium',
+    'icon': '!!',
+    'color': Colors.orange.shade300,
+    'selected': false
+  },
+  {
+    'name': 'high',
+    'icon': '!!!',
+    'color': Colors.red.shade300,
+    'selected': false
+  },
 ];
 
 const List<Map<String, dynamic>> areas = [

@@ -315,6 +315,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             onTap: () {
                               setState(() {
                                 selectedPriority = index;
+                                print('priority object - $selectedPriority');
                               });
                             },
                             child: PriorityItemWidget(
@@ -409,24 +410,27 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     - Clears the input fields for a new task.
   */
 
-  void addTask() async {
+  addTask() async {
     // only can add task if taskName is not empty
     if (taskNameController.text.isNotEmpty) {
-      // return to home screen
-      Navigator.pop(context);
-
       // create new instance of task and pass thru the values
-      Task newTask = Task(
-        taskName: taskNameController.text,
-        taskNote: taskNoteController.text,
-        dueDate: selectedDate,
-        taskTags: _stringTagController.getTags!,
-        taskPriority: selectedPriority,
-        taskArea: selectedArea!,
-      );
+
+      String newTaskName = taskNameController.text;
+      String newTaskNote = taskNoteController.text;
+      String newTaskArea = selectedArea!;
 
       // add new task to db
-      await context.read<TaskDatabase>().createNewTask(newTask);
+      await context.read<TaskDatabase>().createNewTask(
+            newTaskName,
+            newTaskNote,
+            selectedDate,
+            _stringTagController.getTags!,
+            PriorityEnum.values[selectedPriority],
+            newTaskArea,
+          );
+
+      // return to home screen
+      Navigator.pop(context);
 
       // clear controllers
       taskNameController.clear();

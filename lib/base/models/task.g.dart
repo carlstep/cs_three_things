@@ -40,7 +40,8 @@ const TaskSchema = CollectionSchema(
     r'taskPriority': PropertySchema(
       id: 4,
       name: r'taskPriority',
-      type: IsarType.long,
+      type: IsarType.string,
+      enumMap: _TasktaskPriorityEnumValueMap,
     ),
     r'taskTags': PropertySchema(
       id: 5,
@@ -71,6 +72,12 @@ int _taskEstimateSize(
   bytesCount += 3 + object.taskArea.length * 3;
   bytesCount += 3 + object.taskName.length * 3;
   bytesCount += 3 + object.taskNote.length * 3;
+  {
+    final value = object.taskPriority;
+    if (value != null) {
+      bytesCount += 3 + value.name.length * 3;
+    }
+  }
   bytesCount += 3 + object.taskTags.length * 3;
   {
     for (var i = 0; i < object.taskTags.length; i++) {
@@ -91,7 +98,7 @@ void _taskSerialize(
   writer.writeString(offsets[1], object.taskArea);
   writer.writeString(offsets[2], object.taskName);
   writer.writeString(offsets[3], object.taskNote);
-  writer.writeLong(offsets[4], object.taskPriority);
+  writer.writeString(offsets[4], object.taskPriority?.name);
   writer.writeStringList(offsets[5], object.taskTags);
 }
 
@@ -101,15 +108,15 @@ Task _taskDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Task(
-    dueDate: reader.readDateTime(offsets[0]),
-    taskArea: reader.readString(offsets[1]),
-    taskName: reader.readString(offsets[2]),
-    taskNote: reader.readString(offsets[3]),
-    taskPriority: reader.readLong(offsets[4]),
-    taskTags: reader.readStringList(offsets[5]) ?? [],
-  );
+  final object = Task();
+  object.dueDate = reader.readDateTime(offsets[0]);
   object.id = id;
+  object.taskArea = reader.readString(offsets[1]);
+  object.taskName = reader.readString(offsets[2]);
+  object.taskNote = reader.readString(offsets[3]);
+  object.taskPriority =
+      _TasktaskPriorityValueEnumMap[reader.readStringOrNull(offsets[4])];
+  object.taskTags = reader.readStringList(offsets[5]) ?? [];
   return object;
 }
 
@@ -129,13 +136,25 @@ P _taskDeserializeProp<P>(
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
-      return (reader.readLong(offset)) as P;
+      return (_TasktaskPriorityValueEnumMap[reader.readStringOrNull(offset)])
+          as P;
     case 5:
       return (reader.readStringList(offset) ?? []) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _TasktaskPriorityEnumValueMap = {
+  r'low': r'low',
+  r'medium': r'medium',
+  r'high': r'high',
+};
+const _TasktaskPriorityValueEnumMap = {
+  r'low': PriorityEnum.low,
+  r'medium': PriorityEnum.medium,
+  r'high': PriorityEnum.high,
+};
 
 Id _taskGetId(Task object) {
   return object.id;
@@ -717,47 +736,71 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'taskPriority',
+      ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'taskPriority',
+      ));
+    });
+  }
+
   QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityEqualTo(
-      int value) {
+    PriorityEnum? value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'taskPriority',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityGreaterThan(
-    int value, {
+    PriorityEnum? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'taskPriority',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityLessThan(
-    int value, {
+    PriorityEnum? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'taskPriority',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityBetween(
-    int lower,
-    int upper, {
+    PriorityEnum? lower,
+    PriorityEnum? upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -766,6 +809,75 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'taskPriority',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'taskPriority',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'taskPriority',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'taskPriority',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'taskPriority',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterFilterCondition> taskPriorityIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'taskPriority',
+        value: '',
       ));
     });
   }
@@ -1153,9 +1265,10 @@ extension TaskQueryWhereDistinct on QueryBuilder<Task, Task, QDistinct> {
     });
   }
 
-  QueryBuilder<Task, Task, QDistinct> distinctByTaskPriority() {
+  QueryBuilder<Task, Task, QDistinct> distinctByTaskPriority(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'taskPriority');
+      return query.addDistinctBy(r'taskPriority', caseSensitive: caseSensitive);
     });
   }
 
@@ -1197,7 +1310,7 @@ extension TaskQueryProperty on QueryBuilder<Task, Task, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Task, int, QQueryOperations> taskPriorityProperty() {
+  QueryBuilder<Task, PriorityEnum?, QQueryOperations> taskPriorityProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'taskPriority');
     });

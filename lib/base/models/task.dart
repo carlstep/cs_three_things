@@ -13,24 +13,32 @@ class Task {
   // unique task id >> comes from isar
   Id id = Isar.autoIncrement;
   // task name
-  final String taskName;
+  late String taskName;
   // task description
-  final String taskNote;
+  late String taskNote;
   // task dueDate
-  final DateTime dueDate;
+  late DateTime dueDate;
   // task tags
-  final List<String> taskTags;
+  late List<String> taskTags;
   // taskPriority
-  final int taskPriority;
-  // task area
-  final String taskArea;
 
-  Task({
-    required this.taskName,
-    required this.taskNote,
-    required this.dueDate,
-    required this.taskTags,
-    required this.taskPriority,
-    required this.taskArea,
-  });
+  @Enumerated(EnumType.name)
+  PriorityEnum? taskPriority;
+  // task area
+  late String taskArea;
+
+  // Task({
+  //   required this.taskName,
+  //   required this.taskNote,
+  //   required this.dueDate,
+  //   required this.taskTags,
+  //   required this.taskPriority,
+  //   required this.taskArea,
+  // });
+}
+
+enum PriorityEnum {
+  low,
+  medium,
+  high,
 }
