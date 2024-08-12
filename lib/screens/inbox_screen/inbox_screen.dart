@@ -1,9 +1,12 @@
+import 'dart:ffi';
+
 import 'package:cs_three_things/base/database/task_database.dart';
 import 'package:cs_three_things/base/resources/app_styles.dart';
 import 'package:cs_three_things/base/task_tile.dart';
-import 'package:fluentui_icons/fluentui_icons.dart';
+import 'package:cs_three_things/screens/edit_task/edit_task_screen.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../base/models/task.dart';
@@ -16,7 +19,7 @@ class InboxScreen extends StatefulWidget {
 }
 
 class _InboxScreenState extends State<InboxScreen> {
-  List<Task>? tasks;
+  // List<Task>? tasks;
 
   @override
   void initState() {
@@ -24,8 +27,49 @@ class _InboxScreenState extends State<InboxScreen> {
     super.initState();
   }
 
-  void deleteTask(int id) {
-    context.read<TaskDatabase>().deleteTask(id);
+  void _deleteExistingTask(Task task) {
+    String existingTaskName = task.taskName;
+    String existingTaskNote = task.taskNote;
+    int id = task.id;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Confirm Delete Task'),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              existingTaskName,
+              style: AppStyles.textTileStyle1,
+            ),
+            Text(existingTaskNote),
+          ],
+        ),
+        actions: [
+          // delete button
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await context.read<TaskDatabase>().deleteTask(id);
+            },
+            child: Text('Delete'),
+          ),
+          // cancel button
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _editExistingTask() {
+    EditTaskScreen();
   }
 
   @override
@@ -43,6 +87,8 @@ class _InboxScreenState extends State<InboxScreen> {
 
           return TaskTile(
             task: eachTask,
+            onPressedDelete: (context) => _deleteExistingTask(eachTask),
+            onPressedEdit: (context) => _editExistingTask,
           );
         },
       ),

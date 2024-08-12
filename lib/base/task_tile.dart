@@ -15,12 +15,14 @@ class TaskTile extends StatefulWidget {
   // passes the Task values
   final Task task;
   // delete function
-  final void Function()? deleteFunction;
+  final void Function(BuildContext) onPressedDelete;
+  final void Function(BuildContext) onPressedEdit;
 
   const TaskTile({
     super.key,
     required this.task,
-    this.deleteFunction,
+    required this.onPressedDelete,
+    required this.onPressedEdit,
   });
 
   @override
@@ -66,50 +68,18 @@ class _TaskTileState extends State<TaskTile> {
         children: [
           // delete function >> showDialog with task info and confirm to delete
           SlidableAction(
-              icon: FluentSystemIcons.ic_fluent_delete_regular,
-              foregroundColor: AppStyles.unselectedIconColor,
-              onPressed: (context) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Confirm Delete Task'),
-                    content: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          widget.task.taskName,
-                          style: AppStyles.textTileStyle1,
-                        ),
-                        Text(widget.task.taskNote),
-                      ],
-                    ),
-                    actions: [
-                      // delete button
-                      TextButton(
-                        onPressed: () {
-                          // deleteTask(eachTask.id);
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Delete'),
-                      ),
-                      // cancel button
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+            onPressed: widget.onPressedDelete,
+            icon: FluentSystemIcons.ic_fluent_delete_regular,
+            foregroundColor: AppStyles.unselectedIconColor,
+          ),
           // edit task function
+          // TODO - work on edit function
           SlidableAction(
             icon: FluentSystemIcons.ic_fluent_edit_regular,
             foregroundColor: AppStyles.unselectedIconColor,
-            onPressed: null,
+            onPressed: widget.onPressedEdit,
           ),
+          // TODO - work on share function
           SlidableAction(
             icon: FluentSystemIcons.ic_fluent_share_ios_regular,
             foregroundColor: AppStyles.unselectedIconColor,
