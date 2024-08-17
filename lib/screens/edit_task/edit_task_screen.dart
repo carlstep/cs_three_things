@@ -1,23 +1,35 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:textfield_tags/textfield_tags.dart';
+
 import 'package:cs_three_things/base/database/task_database.dart';
 import 'package:cs_three_things/base/models/task.dart';
 import 'package:cs_three_things/base/resources/app_styles.dart';
 import 'package:cs_three_things/screens/add_task/widgets/due_date_input.dart';
 import 'package:cs_three_things/screens/add_task/widgets/priority_item_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:textfield_tags/textfield_tags.dart';
 
 import '../../base/utils/config.dart';
 
 class EditTaskScreen extends StatefulWidget {
-  const EditTaskScreen({super.key});
+  final Task task;
+
+  const EditTaskScreen({
+    super.key,
+    required this.task,
+  });
 
   @override
   State<EditTaskScreen> createState() => _EditTaskScreenState();
 }
 
 class _EditTaskScreenState extends State<EditTaskScreen> {
+  // priority indicator
+  Map<String, dynamic>? _findPriorityConfig(String priorityName) {
+    return priorities
+        .firstWhere((priority) => priority['name'] == priorityName);
+  }
+
   // GlobalKey required by key
   final _taskFormKey = GlobalKey<FormState>();
   // text controller for taskName
@@ -51,6 +63,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     Provider.of<TaskDatabase>(context, listen: false).readTasks();
     super.initState();
     _stringTagController = StringTagController();
+    _setTaskInfo();
   }
 
   @override
@@ -64,7 +77,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Create New Task',
+          'Edit Task',
           style: AppStyles.headlineStyle1,
         ),
       ),
@@ -174,7 +187,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               // TODO - tag field label acts strange
               TextFieldTags<String>(
                 textfieldTagsController: _stringTagController,
-                initialTags: const [],
+                initialTags: widget.task.taskTags,
                 textSeparators: const [' ', ','],
                 letterCase: LetterCase.normal,
                 validator: (String tag) {
@@ -315,10 +328,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             onTap: () {
                               setState(() {
                                 selectedPriority = index;
-                                print('priority object - $selectedPriority');
                               });
                             },
                             child: PriorityItemWidget(
+                              // TODO - how to return the selected priority
                               selectedPriority: selectedPriority,
                               index: index,
                             ),
@@ -351,7 +364,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                           ),
                           contentPadding: const EdgeInsets.all(5)),
                       width: 200,
-                      initialSelection: areas.first['area'],
+                      // displays the stored value for the taskArea
+                      initialSelection: selectedArea,
                       controller: areaMenuController,
                       requestFocusOnTap: true,
                       label: const Text('Area'),
@@ -384,10 +398,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                 style: OutlinedButton.styleFrom(
                     fixedSize: Size(MediaQuery.of(context).size.width * 1, 50)),
                 onPressed: () {
-                  addTask();
+                  print('UPDATE TASK DATA');
                 },
                 child: Text(
-                  'Add New Task',
+                  'Update Task',
                   style: AppStyles.textLabelStyle2,
                 ),
               ),
@@ -399,6 +413,17 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         ),
       ),
     );
+  }
+
+  _setTaskInfo() async {
+    taskNameController.text = widget.task.taskName;
+    taskNoteController.text = widget.task.taskNote;
+    selectedDate = widget.task.dueDate;
+    selectedArea = widget.task.taskArea;
+
+// TODO -  selectedPriority,  >> not returning data
+
+    print(widget.task.taskPriority);
   }
 
   /*

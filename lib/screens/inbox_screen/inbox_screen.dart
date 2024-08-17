@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../base/models/task.dart';
+import '../../base/utils/app_routes.dart';
 
 class InboxScreen extends StatefulWidget {
   const InboxScreen({super.key});
@@ -68,8 +69,15 @@ class _InboxScreenState extends State<InboxScreen> {
     );
   }
 
-  void _editExistingTask() {
-    EditTaskScreen();
+  void _editExistingTask(Task task) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditTaskScreen(
+          task: task,
+        ),
+      ),
+    );
   }
 
   @override
@@ -88,7 +96,7 @@ class _InboxScreenState extends State<InboxScreen> {
           return TaskTile(
             task: eachTask,
             onPressedDelete: (context) => _deleteExistingTask(eachTask),
-            onPressedEdit: (context) => _editExistingTask,
+            onPressedEdit: (context) => _editExistingTask(eachTask),
           );
         },
       ),

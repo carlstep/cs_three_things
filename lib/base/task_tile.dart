@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cs_three_things/screens/add_task/widgets/priority_item_widget.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -35,8 +36,11 @@ class _TaskTileState extends State<TaskTile> {
 
   // priority indicator
   Map<String, dynamic>? _findPriorityConfig(String priorityName) {
-    return priorities
-        .firstWhere((priority) => priority['name'] == priorityName);
+    return priorities.firstWhere(
+      (priority) {
+        return priority['name'] == priorityName;
+      },
+    );
   }
 
   @override
@@ -123,6 +127,11 @@ class _TaskTileState extends State<TaskTile> {
                     // priority indicator
                     Row(
                       children: [
+                        // TODO - how to use the PriorityItemWidget to display selectedPriority
+                        PriorityItemWidget(
+                          selectedPriority: 2,
+                          index: 2,
+                        ),
                         CircleAvatar(
                           backgroundColor: _findPriorityConfig(
                               widget.task.taskPriority?.name ?? '')?['color'],
