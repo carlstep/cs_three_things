@@ -10,7 +10,7 @@ class TaskDatabase extends ChangeNotifier {
   static late Isar isar;
   // declares a static late variable 'isar', which holds the reference to the Isar database
 
-  List<Task> _allTasks = [];
+  final List<Task> _allTasks = [];
   // _allTasks is a private list. Stores all Task objects from the Isar db
 
   // SETUP

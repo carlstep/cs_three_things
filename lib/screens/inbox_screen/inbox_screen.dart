@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:cs_three_things/base/database/task_database.dart';
 import 'package:cs_three_things/base/resources/app_styles.dart';
@@ -54,7 +53,7 @@ class _InboxScreenState extends State<InboxScreen> {
               Navigator.pop(context);
               await context.read<TaskDatabase>().deleteTask(id);
             },
-            child: Text('Delete'),
+            child: const Text('Delete'),
           ),
           // cancel button
           TextButton(
@@ -69,7 +68,7 @@ class _InboxScreenState extends State<InboxScreen> {
   }
 
   void _editExistingTask() {
-    EditTaskScreen();
+    const EditTaskScreen();
   }
 
   @override

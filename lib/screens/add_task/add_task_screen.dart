@@ -331,11 +331,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   // TODO - setup user can add new area
                   DropdownMenu<String>(
                       menuStyle: const MenuStyle(
-                        side: MaterialStatePropertyAll<BorderSide?>(
+                        side: WidgetStatePropertyAll<BorderSide?>(
                           BorderSide(width: 0.25),
                         ),
-                        elevation: MaterialStatePropertyAll(0),
-                        shadowColor: MaterialStatePropertyAll(Colors.white),
+                        elevation: WidgetStatePropertyAll(0),
+                        shadowColor: WidgetStatePropertyAll(Colors.white),
                       ),
                       inputDecorationTheme: InputDecorationTheme(
                           border: const OutlineInputBorder(
