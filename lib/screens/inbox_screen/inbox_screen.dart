@@ -1,4 +1,3 @@
-
 import 'package:cs_three_things/base/database/task_database.dart';
 import 'package:cs_three_things/base/resources/app_styles.dart';
 import 'package:cs_three_things/base/task_tile.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../base/models/task.dart';
+import '../../base/utils/app_routes.dart';
 
 class InboxScreen extends StatefulWidget {
   const InboxScreen({super.key});
@@ -68,7 +68,7 @@ class _InboxScreenState extends State<InboxScreen> {
   }
 
   void _editExistingTask() {
-    const EditTaskScreen();
+    EditTaskScreen();
   }
 
   @override
@@ -87,7 +87,7 @@ class _InboxScreenState extends State<InboxScreen> {
           return TaskTile(
             task: eachTask,
             onPressedDelete: (context) => _deleteExistingTask(eachTask),
-            onPressedEdit: (context) => _editExistingTask,
+            onPressedEdit: (context) => _editExistingTask(eachTask),
           );
         },
       ),

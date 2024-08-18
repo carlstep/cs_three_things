@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'base/bottom_nav_bar.dart';
 import 'base/utils/app_routes.dart';
 import 'screens/add_task/add_task_screen.dart';
+import 'screens/edit_task/edit_task_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,8 @@ class MainApp extends StatelessWidget {
         AppRoutes.inboxScreen: (context) => const InboxScreen(),
         // navigate to AppRoutes.addTaskScreen
         AppRoutes.addTaskScreen: (context) => const AddTaskScreen(),
+        // navigate to EditTaskScreen
+        // AppRoutes.editTaskScreen: (context) => const EditTaskScreen(),
       },
     );
   }
