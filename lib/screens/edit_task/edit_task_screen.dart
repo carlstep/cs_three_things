@@ -25,10 +25,9 @@ class EditTaskScreen extends StatefulWidget {
 
 class _EditTaskScreenState extends State<EditTaskScreen> {
   // priority indicator
-  Map<String, dynamic>? _findPriorityConfig(String priorityName) {
-    return priorities
-        .firstWhere((priority) => priority['name'] == priorityName);
-  }
+  // Map<String, dynamic>? _findPriorityConfig(int index) {
+  //   return priorities.firstWhere((priority) => priority['name'] == index);
+  // }
 
   // GlobalKey required by key
   final _taskFormKey = GlobalKey<FormState>();
@@ -422,8 +421,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     selectedArea = widget.task.taskArea;
 
 // TODO -  selectedPriority,  >> not returning data
-
-    print(widget.task.taskPriority);
+    // selectedPriority = PriorityEnum.values[selectedPriority];
+    print('_setTaskInfo - ${PriorityEnum.values[selectedPriority]}');
   }
 
   /*

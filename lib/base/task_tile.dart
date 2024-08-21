@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cs_three_things/screens/add_task/widgets/priority_item_widget.dart';
+
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -98,6 +98,7 @@ class _TaskTileState extends State<TaskTile> {
           });
         },
         child: Card(
+          color: Colors.transparent,
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -127,18 +128,18 @@ class _TaskTileState extends State<TaskTile> {
                     // priority indicator
                     Row(
                       children: [
-                        // TODO - how to use the PriorityItemWidget to display selectedPriority
-                        PriorityItemWidget(
-                          selectedPriority: 2,
-                          index: 2,
-                        ),
                         CircleAvatar(
+                          radius: 20,
                           backgroundColor: _findPriorityConfig(
                               widget.task.taskPriority?.name ?? '')?['color'],
-                          radius: 15,
-                          child: Text(
-                            _findPriorityConfig(
-                                widget.task.taskPriority?.name ?? '')?['icon'],
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 15,
+                            child: Text(
+                              _findPriorityConfig(
+                                  widget.task.taskPriority?.name ??
+                                      '')?['icon'],
+                            ),
                           ),
                         ),
                       ],

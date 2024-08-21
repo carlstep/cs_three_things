@@ -53,14 +53,6 @@ class TaskDatabase extends ChangeNotifier {
 
     // re-read from db
     await readTasks();
-
-    void printTasks() {
-      for (final task in _allTasks) {
-        print(task.taskPriority);
-      }
-    }
-
-    printTasks();
   }
 
   // - read tasks

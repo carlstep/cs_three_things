@@ -312,6 +312,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         itemCount: priorities.length,
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
+                            // uses 'index' to set the value of the 'selectedPriority'
                             onTap: () {
                               setState(() {
                                 selectedPriority = index;
@@ -431,6 +432,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
       // return to home screen
       Navigator.pop(context);
+      print('addTask - ${PriorityEnum.values[selectedPriority]}');
 
       // clear controllers
       taskNameController.clear();

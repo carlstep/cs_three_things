@@ -22,19 +22,10 @@ class Task {
   late List<String> taskTags;
   // taskPriority
 
-  @Enumerated(EnumType.name)
+  @Enumerated(EnumType.value) //EnumType.value or Enum.Type.name??
   PriorityEnum? taskPriority;
   // task area
   late String taskArea;
-
-  // Task({
-  //   required this.taskName,
-  //   required this.taskNote,
-  //   required this.dueDate,
-  //   required this.taskTags,
-  //   required this.taskPriority,
-  //   required this.taskArea,
-  // });
 }
 
 enum PriorityEnum {
