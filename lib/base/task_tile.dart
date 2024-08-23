@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -101,9 +99,9 @@ class _TaskTileState extends State<TaskTile> {
           color: Colors.transparent,
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
             side: BorderSide(
-              width: .5,
+              width: .3,
               color: Colors.grey.shade900,
             ),
           ),
@@ -134,7 +132,7 @@ class _TaskTileState extends State<TaskTile> {
                               widget.task.taskPriority?.name ?? '')?['color'],
                           child: CircleAvatar(
                             backgroundColor: Colors.white,
-                            radius: 15,
+                            radius: 17,
                             child: Text(
                               _findPriorityConfig(
                                   widget.task.taskPriority?.name ??
