@@ -28,7 +28,7 @@ class AppStyles {
   static TextStyle textTileStyle2 =
       const TextStyle(fontSize: 16, fontWeight: FontWeight.w700);
   static TextStyle textTileChipStyle2 =
-      const TextStyle(fontSize: 14, fontWeight: FontWeight.w400);
+      const TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
 
   // - text input
   static TextStyle textInputStyle1 =

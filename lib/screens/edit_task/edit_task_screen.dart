@@ -102,13 +102,13 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   hintStyle: AppStyles.textHintStyle,
                   border: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(
-                      Radius.circular(15),
+                      Radius.circular(10),
                     ),
                     borderSide: AppStyles.inputBorderStyle,
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(
-                      Radius.circular(15),
+                      Radius.circular(10),
                     ),
                     borderSide: AppStyles.focusedBorderStyle,
                   ),
@@ -136,13 +136,13 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     hintStyle: AppStyles.textHintStyle,
                     border: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(
-                        Radius.circular(15),
+                        Radius.circular(10),
                       ),
                       borderSide: AppStyles.inputBorderStyle,
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(
-                        Radius.circular(15),
+                        Radius.circular(10),
                       ),
                       borderSide: AppStyles.focusedBorderStyle,
                     ),
@@ -206,14 +206,14 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                       // design for border
                       border: OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(15),
+                          Radius.circular(10),
                         ),
                         borderSide: AppStyles.inputBorderStyle,
                       ),
                       // design for border if active
                       focusedBorder: OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(15),
+                          Radius.circular(10),
                         ),
                         borderSide: AppStyles.focusedBorderStyle,
                       ),
@@ -243,7 +243,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                     return Container(
                                       decoration: BoxDecoration(
                                         borderRadius: const BorderRadius.all(
-                                          Radius.circular(15.0),
+                                          Radius.circular(10.0),
                                         ),
                                         color: Colors.blueGrey.shade400,
                                       ),
@@ -349,12 +349,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                       inputDecorationTheme: InputDecorationTheme(
                           border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(15),
+                              Radius.circular(10),
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
+                              Radius.circular(10),
                             ),
                             borderSide: AppStyles.focusedBorderStyle,
                           ),

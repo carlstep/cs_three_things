@@ -24,7 +24,7 @@ class DueDateInput extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppStyles.unselectedIconColor),
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(10),
       ),
       // a row to align the two main parts > Text to display the selectedDate, > IconButton to display showDatePicker calendar icon
       child: Row(

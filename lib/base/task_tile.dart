@@ -206,10 +206,15 @@ class _TaskTileState extends State<TaskTile> {
                                               (tag) => Chip(
                                                 side: BorderSide.none,
                                                 backgroundColor:
-                                                    Colors.grey.shade400,
+                                                    Colors.grey.shade300,
                                                 label: Text(tag),
                                                 labelStyle: AppStyles
                                                     .textTileChipStyle2,
+                                                labelPadding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 2,
+                                                  vertical: 0,
+                                                ),
                                               ),
                                             )
                                             .toList(),

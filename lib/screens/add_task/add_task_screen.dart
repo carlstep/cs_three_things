@@ -94,13 +94,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   hintStyle: AppStyles.textHintStyle,
                   border: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(
-                      Radius.circular(15),
+                      Radius.circular(10),
                     ),
                     borderSide: AppStyles.inputBorderStyle,
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(
-                      Radius.circular(15),
+                      Radius.circular(10),
                     ),
                     borderSide: AppStyles.focusedBorderStyle,
                   ),
@@ -128,13 +128,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     hintStyle: AppStyles.textHintStyle,
                     border: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(
-                        Radius.circular(15),
+                        Radius.circular(10),
                       ),
                       borderSide: AppStyles.inputBorderStyle,
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(
-                        Radius.circular(15),
+                        Radius.circular(10),
                       ),
                       borderSide: AppStyles.focusedBorderStyle,
                     ),
@@ -198,14 +198,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       // design for border
                       border: OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(15),
+                          Radius.circular(10),
                         ),
                         borderSide: AppStyles.inputBorderStyle,
                       ),
                       // design for border if active
                       focusedBorder: OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(15),
+                          Radius.circular(10),
                         ),
                         borderSide: AppStyles.focusedBorderStyle,
                       ),
@@ -341,12 +341,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       inputDecorationTheme: InputDecorationTheme(
                           border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(15),
+                              Radius.circular(10),
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
+                              Radius.circular(10),
                             ),
                             borderSide: AppStyles.focusedBorderStyle,
                           ),
