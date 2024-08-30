@@ -58,6 +58,7 @@ class _TaskTileState extends State<TaskTile> {
           SlidableAction(
             padding: const EdgeInsets.all(0),
             spacing: 0,
+            // onPressed - moves the selected task to the focus list
             onPressed: null,
             icon: FluentSystemIcons.ic_fluent_target_regular,
             foregroundColor: AppStyles.unselectedIconColor,
@@ -75,7 +76,6 @@ class _TaskTileState extends State<TaskTile> {
             foregroundColor: AppStyles.unselectedIconColor,
           ),
           // edit task function
-          // TODO - work on edit function
           SlidableAction(
             icon: FluentSystemIcons.ic_fluent_edit_regular,
             foregroundColor: AppStyles.unselectedIconColor,
@@ -85,6 +85,7 @@ class _TaskTileState extends State<TaskTile> {
           SlidableAction(
             icon: FluentSystemIcons.ic_fluent_share_ios_regular,
             foregroundColor: AppStyles.unselectedIconColor,
+            // onPressed - when tapped, the task data can be shared to external apps
             onPressed: null,
           ),
         ],
@@ -122,7 +123,7 @@ class _TaskTileState extends State<TaskTile> {
                       widget.task.taskName,
                       style: AppStyles.textTileStyle1,
                     ),
-                    // TODO - work on the priority indicator
+
                     // priority indicator
                     Row(
                       children: [

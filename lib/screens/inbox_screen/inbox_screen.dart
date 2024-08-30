@@ -84,18 +84,39 @@ class _InboxScreenState extends State<InboxScreen> {
     // List<Task> taskList = taskDatabase.allTasks;
 
     return Consumer<TaskDatabase>(
-      builder: (context, value, child) => ListView.builder(
-        itemCount: value.allTasks.length,
-        itemBuilder: (context, index) {
-          Task eachTask = value.allTasks[index];
-          // slidable function >> delete >> edit >> share >> focus
+      builder: (context, value, child) => Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(width: 4),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: value.allTasks.length,
+              itemBuilder: (context, index) {
+                Task eachTask = value.allTasks[index];
 
-          return TaskTile(
-            task: eachTask,
-            onPressedDelete: (context) => _deleteExistingTask(eachTask),
-            onPressedEdit: (context) => _editExistingTask(eachTask),
-          );
-        },
+                return TaskTile(
+                  task: eachTask,
+                  onPressedDelete: (context) => _deleteExistingTask(eachTask),
+                  onPressedEdit: (context) => _editExistingTask(eachTask),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -57,8 +57,9 @@ class TaskDatabase extends ChangeNotifier {
 
   // - read tasks
   Future<void> readTasks() async {
-    // fetch all existing tasks
-    List<Task> fetchedTasks = await isar.tasks.where().findAll();
+    // fetch all existing tasks, sort by dueDate
+    List<Task> fetchedTasks =
+        await isar.tasks.where().sortByDueDate().findAll();
 
     // clear all expenses list and add
     _allTasks.clear();
@@ -78,6 +79,8 @@ class TaskDatabase extends ChangeNotifier {
 
     // re-read from db
     await readTasks();
+
+    notifyListeners();
   }
 
   // - delete

@@ -39,7 +39,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   late double _distanceToField;
   int maxTagLimit = 3;
 
-// TODO
   // task Priority
   int selectedPriority = 0;
 
@@ -179,7 +178,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               ),
 
               // TASK TAGS
-              // TODO - tag field label acts strange
               TextFieldTags<String>(
                 textfieldTagsController: _stringTagController,
                 initialTags: widget.task.taskTags,
@@ -323,11 +321,9 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             onTap: () {
                               setState(() {
                                 selectedPriority = index;
-                                print('gd - $selectedPriority');
                               });
                             },
                             child: PriorityItemWidget(
-                              // TODO - how to return the selected priority
                               selectedPriority: selectedPriority,
                               index: index,
                             ),
@@ -394,7 +390,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                 style: OutlinedButton.styleFrom(
                     fixedSize: Size(MediaQuery.of(context).size.width * 1, 50)),
                 onPressed: () {
-                  print('UPDATE TASK DATA');
+                  _editTaskInfo();
                 },
                 child: Text(
                   'Update Task',
@@ -411,49 +407,47 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     );
   }
 
-  _setTaskInfo() async {
+  // _setTaskInfo retrieves the data for the task
+
+  _setTaskInfo() {
     taskNameController.text = widget.task.taskName;
     taskNoteController.text = widget.task.taskNote;
     selectedDate = widget.task.dueDate;
     selectedArea = widget.task.taskArea;
     selectedPriority = widget.task.taskPriority!.index;
+    print('SET TASK DATA');
   }
 
-  /*
-  This function handles adding a new task to the application. It performs the following actions:
-    - Checks if the task name is provided. 
-    - Navigates back if the task name is provided.
-    - Creates a new Task object with user-provided details.
-    - Saves the new task to a database (asynchronous).
-    - Clears the input fields for a new task.
-  */
+  _editTaskInfo() async {
+    final formState = _taskFormKey.currentState;
+    if (formState!.validate()) {
+      // Extract edited task data to new object
+      final updatedTask = Task()
+        ..id = widget.task.id
+        ..taskName = taskNameController.text
+        ..taskNote = taskNoteController.text
+        ..dueDate = selectedDate
+        ..taskTags = _stringTagController.getTags!.toList()
+        ..taskPriority = PriorityEnum.values[selectedPriority]
+        ..taskArea = selectedArea!;
 
-  addTask() async {
-    // only can add task if taskName is not empty
-    if (taskNameController.text.isNotEmpty) {
-      // create new instance of task and pass thru the values
-
-      String newTaskName = taskNameController.text;
-      String newTaskNote = taskNoteController.text;
-      String newTaskArea = selectedArea!;
-
-      // add new task to db
-      await context.read<TaskDatabase>().createNewTask(
-            newTaskName,
-            newTaskNote,
-            selectedDate,
-            _stringTagController.getTags!,
-            PriorityEnum.values[selectedPriority],
-            newTaskArea,
-          );
-
-      // return to home screen
-      Navigator.pop(context);
-
-      // clear controllers
-      taskNameController.clear();
-      taskNoteController.clear();
-      _stringTagController.clearTags();
+      // Update the task in the TaskDatabase
+      try {
+        await Provider.of<TaskDatabase>(context, listen: false)
+            .updateTask(updatedTask.id, updatedTask);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Task updated successfully'),
+          ),
+        );
+        Navigator.pop(context); // Navigate back to the task list screen
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error updating task'),
+          ),
+        );
+      }
     }
   }
 }

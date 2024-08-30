@@ -316,7 +316,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             onTap: () {
                               setState(() {
                                 selectedPriority = index;
-                                print('priority object - $selectedPriority');
                               });
                             },
                             child: PriorityItemWidget(
@@ -432,7 +431,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
       // return to home screen
       Navigator.pop(context);
-      print('addTask - ${PriorityEnum.values[selectedPriority]}');
 
       // clear controllers
       taskNameController.clear();
