@@ -58,8 +58,11 @@ class TaskDatabase extends ChangeNotifier {
   // - read tasks
   Future<void> readTasks() async {
     // fetch all existing tasks, sort by dueDate
+    // List<Task> fetchedTasks =
+    //     await isar.tasks.where().sortByDueDate().findAll();
+
     List<Task> fetchedTasks =
-        await isar.tasks.where().sortByDueDate().findAll();
+        await isar.tasks.where().sortByTaskPriority().findAll();
 
     // clear all expenses list and add
     _allTasks.clear();
@@ -93,4 +96,21 @@ class TaskDatabase extends ChangeNotifier {
   }
 
   // HELPER METHODS
+
+  // search all tasks and display only tasks matching searchText
+  Future<void> taskByTextSearch(String searchText) async {
+    List<Task> searchedTasks = await isar.tasks
+        .filter()
+        .taskNameContains(searchText)
+        .or()
+        .taskNoteContains(searchText)
+        .or()
+        .taskTagsElementContains(searchText)
+        .findAll();
+
+    _allTasks.clear();
+    _allTasks.addAll(searchedTasks);
+
+    notifyListeners();
+  }
 }

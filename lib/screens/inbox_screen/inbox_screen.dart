@@ -17,7 +17,12 @@ class InboxScreen extends StatefulWidget {
 }
 
 class _InboxScreenState extends State<InboxScreen> {
-  // List<Task>? tasks;
+  List<Task>? tasks;
+
+  // controller for search textfield
+  final TextEditingController _searchController = TextEditingController();
+
+  bool searching = false;
 
   @override
   void initState() {
@@ -77,6 +82,12 @@ class _InboxScreenState extends State<InboxScreen> {
     );
   }
 
+  searchTaskText(String searchText) async {
+    searching = true;
+    Provider.of<TaskDatabase>(context, listen: false)
+        .taskByTextSearch(searchText);
+  }
+
   @override
   Widget build(BuildContext context) {
     // final taskDatabase = context.watch<TaskDatabase>();
@@ -86,14 +97,29 @@ class _InboxScreenState extends State<InboxScreen> {
     return Consumer<TaskDatabase>(
       builder: (context, value, child) => Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(
+          Padding(
+            padding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 10,
             ),
             child: TextField(
+              onChanged: searchTaskText,
+              controller: _searchController,
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                border: OutlineInputBorder(
+                hintText: 'search...',
+                suffixIcon: searching
+                    // GD clears the search field
+                    ? GestureDetector(
+                        onTap: () => setState(() {
+                          // returns searchTaskText and _searcController to initial state
+                          _searchController.text = '';
+                          searchTaskText('');
+                        }),
+                        child: const Icon(Icons.clear),
+                      )
+                    : const Icon(Icons.search),
+                border: const OutlineInputBorder(
                   borderSide: BorderSide(width: 4),
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
@@ -102,6 +128,7 @@ class _InboxScreenState extends State<InboxScreen> {
               ),
             ),
           ),
+          const Divider(),
           Expanded(
             child: ListView.builder(
               itemCount: value.allTasks.length,
