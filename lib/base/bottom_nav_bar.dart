@@ -1,5 +1,6 @@
 import 'package:cs_three_things/base/resources/app_styles.dart';
 import 'package:cs_three_things/base/utils/app_routes.dart';
+import 'package:cs_three_things/screens/focus_screen/focus_screen.dart';
 import 'package:cs_three_things/screens/inbox_screen/inbox_screen.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   final appScreens = [
-    const Center(child: Text('focus screen')),
+    const FocusScreen(),
     const InboxScreen(),
     const Center(child: Text('stats screen')),
   ];
@@ -59,7 +60,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         iconSize: 34,
         items: const [
           BottomNavigationBarItem(
-              label: 'home',
+              label: 'focus',
               icon: Icon(
                 FluentSystemIcons.ic_fluent_target_regular,
               )),
