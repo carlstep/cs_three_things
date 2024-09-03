@@ -30,6 +30,11 @@ class _InboxScreenState extends State<InboxScreen> {
     super.initState();
   }
 
+  void _setTaskToFocus(Task task) {
+    bool isFocused = false;
+    print('set focus');
+  }
+
   void _deleteExistingTask(Task task) {
     String existingTaskName = task.taskName;
     String existingTaskNote = task.taskNote;
@@ -139,6 +144,7 @@ class _InboxScreenState extends State<InboxScreen> {
                   task: eachTask,
                   onPressedDelete: (context) => _deleteExistingTask(eachTask),
                   onPressedEdit: (context) => _editExistingTask(eachTask),
+                  onPressedFocus: (context) => _setTaskToFocus(eachTask),
                 );
               },
             ),

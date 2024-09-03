@@ -113,4 +113,8 @@ class TaskDatabase extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<void> updateTaskFocus(Task task) async {
+    List<Task> focusList = [];
+  }
 }

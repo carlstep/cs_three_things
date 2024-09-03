@@ -16,12 +16,16 @@ class TaskTile extends StatefulWidget {
   // delete function
   final void Function(BuildContext) onPressedDelete;
   final void Function(BuildContext) onPressedEdit;
+  final bool? isFocused;
+  final void Function(BuildContext)? onPressedFocus;
 
   const TaskTile({
     super.key,
     required this.task,
     required this.onPressedDelete,
     required this.onPressedEdit,
+    this.isFocused,
+    required this.onPressedFocus,
   });
 
   @override
@@ -56,10 +60,12 @@ class _TaskTileState extends State<TaskTile> {
         children: [
           // mark task for focus screen
           SlidableAction(
+            autoClose: false,
             padding: const EdgeInsets.all(0),
             spacing: 0,
             // onPressed - moves the selected task to the focus list
-            onPressed: null,
+            // TODO - set up move to focus list
+            onPressed: widget.onPressedFocus,
             icon: FluentSystemIcons.ic_fluent_target_regular,
             foregroundColor: AppStyles.unselectedIconColor,
           )
