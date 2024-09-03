@@ -55,7 +55,7 @@ class _TaskTileState extends State<TaskTile> {
   Widget build(BuildContext context) {
     return Slidable(
       startActionPane: ActionPane(
-        extentRatio: 0.3,
+        extentRatio: 0.2,
         motion: const ScrollMotion(),
         children: [
           // mark task for focus screen
@@ -66,8 +66,11 @@ class _TaskTileState extends State<TaskTile> {
             // onPressed - moves the selected task to the focus list
             // TODO - set up move to focus list
             onPressed: widget.onPressedFocus,
+
             icon: FluentSystemIcons.ic_fluent_target_regular,
-            foregroundColor: AppStyles.unselectedIconColor,
+            foregroundColor: widget.task.isFocused
+                ? AppStyles.selectedIconColor
+                : AppStyles.unselectedIconColor,
           )
         ],
       ),
@@ -108,8 +111,10 @@ class _TaskTileState extends State<TaskTile> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
             side: BorderSide(
-              width: .3,
-              color: Colors.grey.shade900,
+              width: widget.task.isFocused ? 2 : .3,
+              color: widget.task.isFocused
+                  ? AppStyles.selectedIconColor
+                  : Colors.grey.shade900,
             ),
           ),
           // elevation set to 0
@@ -125,6 +130,13 @@ class _TaskTileState extends State<TaskTile> {
                   // crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Icon(
+                      widget.task.isFocused
+                          ? FluentSystemIcons.ic_fluent_target_regular
+                          : null,
+                      color: AppStyles.selectedIconColor,
+                    ),
+
                     Text(
                       widget.task.taskName,
                       style: AppStyles.textTileStyle1,

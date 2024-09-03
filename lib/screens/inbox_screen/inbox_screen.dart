@@ -32,7 +32,12 @@ class _InboxScreenState extends State<InboxScreen> {
 
   void _setTaskToFocus(Task task) {
     bool isFocused = false;
-    print('set focus');
+    Provider.of<TaskDatabase>(context, listen: false)
+        .updateTaskFocus(task.id, isFocused);
+
+    setState(() {
+      isFocused = true;
+    });
   }
 
   void _deleteExistingTask(Task task) {

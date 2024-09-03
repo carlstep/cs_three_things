@@ -114,7 +114,19 @@ class TaskDatabase extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateTaskFocus(Task task) async {
-    List<Task> focusList = [];
+  Future<void> updateTaskFocus(int id, bool isFocused) async {
+    final task = await isar.tasks.get(id);
+
+    if (task != null) {
+      await isar.writeTxn(() async {
+        task.isFocused = !task.isFocused;
+
+        await isar.tasks.put(task);
+      });
+
+      notifyListeners();
+
+      await readTasks();
+    }
   }
 }

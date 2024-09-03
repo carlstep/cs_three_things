@@ -22,29 +22,34 @@ const TaskSchema = CollectionSchema(
       name: r'dueDate',
       type: IsarType.dateTime,
     ),
-    r'taskArea': PropertySchema(
+    r'isFocused': PropertySchema(
       id: 1,
+      name: r'isFocused',
+      type: IsarType.bool,
+    ),
+    r'taskArea': PropertySchema(
+      id: 2,
       name: r'taskArea',
       type: IsarType.string,
     ),
     r'taskName': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'taskName',
       type: IsarType.string,
     ),
     r'taskNote': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'taskNote',
       type: IsarType.string,
     ),
     r'taskPriority': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'taskPriority',
       type: IsarType.string,
       enumMap: _TasktaskPriorityEnumValueMap,
     ),
     r'taskTags': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'taskTags',
       type: IsarType.stringList,
     )
@@ -54,7 +59,26 @@ const TaskSchema = CollectionSchema(
   deserialize: _taskDeserialize,
   deserializeProp: _taskDeserializeProp,
   idName: r'id',
-  indexes: {},
+  indexes: {
+    r'isFocused_taskName': IndexSchema(
+      id: 322010114576031559,
+      name: r'isFocused_taskName',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'isFocused',
+          type: IndexType.value,
+          caseSensitive: false,
+        ),
+        IndexPropertySchema(
+          name: r'taskName',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
   links: {},
   embeddedSchemas: {},
   getId: _taskGetId,
@@ -95,11 +119,12 @@ void _taskSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDateTime(offsets[0], object.dueDate);
-  writer.writeString(offsets[1], object.taskArea);
-  writer.writeString(offsets[2], object.taskName);
-  writer.writeString(offsets[3], object.taskNote);
-  writer.writeString(offsets[4], object.taskPriority?.name);
-  writer.writeStringList(offsets[5], object.taskTags);
+  writer.writeBool(offsets[1], object.isFocused);
+  writer.writeString(offsets[2], object.taskArea);
+  writer.writeString(offsets[3], object.taskName);
+  writer.writeString(offsets[4], object.taskNote);
+  writer.writeString(offsets[5], object.taskPriority?.name);
+  writer.writeStringList(offsets[6], object.taskTags);
 }
 
 Task _taskDeserialize(
@@ -111,12 +136,13 @@ Task _taskDeserialize(
   final object = Task();
   object.dueDate = reader.readDateTime(offsets[0]);
   object.id = id;
-  object.taskArea = reader.readString(offsets[1]);
-  object.taskName = reader.readString(offsets[2]);
-  object.taskNote = reader.readString(offsets[3]);
+  object.isFocused = reader.readBool(offsets[1]);
+  object.taskArea = reader.readString(offsets[2]);
+  object.taskName = reader.readString(offsets[3]);
+  object.taskNote = reader.readString(offsets[4]);
   object.taskPriority =
-      _TasktaskPriorityValueEnumMap[reader.readStringOrNull(offsets[4])];
-  object.taskTags = reader.readStringList(offsets[5]) ?? [];
+      _TasktaskPriorityValueEnumMap[reader.readStringOrNull(offsets[5])];
+  object.taskTags = reader.readStringList(offsets[6]) ?? [];
   return object;
 }
 
@@ -130,15 +156,17 @@ P _taskDeserializeProp<P>(
     case 0:
       return (reader.readDateTime(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
+      return (reader.readString(offset)) as P;
+    case 5:
       return (_TasktaskPriorityValueEnumMap[reader.readStringOrNull(offset)])
           as P;
-    case 5:
+    case 6:
       return (reader.readStringList(offset) ?? []) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -239,6 +267,96 @@ extension TaskQueryWhere on QueryBuilder<Task, Task, QWhereClause> {
         upper: upperId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterWhereClause> isFocusedEqualToAnyTaskName(
+      bool isFocused) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'isFocused_taskName',
+        value: [isFocused],
+      ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterWhereClause> isFocusedNotEqualToAnyTaskName(
+      bool isFocused) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'isFocused_taskName',
+              lower: [],
+              upper: [isFocused],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'isFocused_taskName',
+              lower: [isFocused],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'isFocused_taskName',
+              lower: [isFocused],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'isFocused_taskName',
+              lower: [],
+              upper: [isFocused],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterWhereClause> isFocusedTaskNameEqualTo(
+      bool isFocused, String taskName) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'isFocused_taskName',
+        value: [isFocused, taskName],
+      ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterWhereClause>
+      isFocusedEqualToTaskNameNotEqualTo(bool isFocused, String taskName) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'isFocused_taskName',
+              lower: [isFocused],
+              upper: [isFocused, taskName],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'isFocused_taskName',
+              lower: [isFocused, taskName],
+              includeLower: false,
+              upper: [isFocused],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'isFocused_taskName',
+              lower: [isFocused, taskName],
+              includeLower: false,
+              upper: [isFocused],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'isFocused_taskName',
+              lower: [isFocused],
+              upper: [isFocused, taskName],
+              includeUpper: false,
+            ));
+      }
     });
   }
 }
@@ -345,6 +463,15 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterFilterCondition> isFocusedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isFocused',
+        value: value,
       ));
     });
   }
@@ -1114,6 +1241,18 @@ extension TaskQuerySortBy on QueryBuilder<Task, Task, QSortBy> {
     });
   }
 
+  QueryBuilder<Task, Task, QAfterSortBy> sortByIsFocused() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isFocused', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterSortBy> sortByIsFocusedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isFocused', Sort.desc);
+    });
+  }
+
   QueryBuilder<Task, Task, QAfterSortBy> sortByTaskArea() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'taskArea', Sort.asc);
@@ -1188,6 +1327,18 @@ extension TaskQuerySortThenBy on QueryBuilder<Task, Task, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Task, Task, QAfterSortBy> thenByIsFocused() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isFocused', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Task, Task, QAfterSortBy> thenByIsFocusedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isFocused', Sort.desc);
+    });
+  }
+
   QueryBuilder<Task, Task, QAfterSortBy> thenByTaskArea() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'taskArea', Sort.asc);
@@ -1244,6 +1395,12 @@ extension TaskQueryWhereDistinct on QueryBuilder<Task, Task, QDistinct> {
     });
   }
 
+  QueryBuilder<Task, Task, QDistinct> distinctByIsFocused() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isFocused');
+    });
+  }
+
   QueryBuilder<Task, Task, QDistinct> distinctByTaskArea(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1289,6 +1446,12 @@ extension TaskQueryProperty on QueryBuilder<Task, Task, QQueryProperty> {
   QueryBuilder<Task, DateTime, QQueryOperations> dueDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dueDate');
+    });
+  }
+
+  QueryBuilder<Task, bool, QQueryOperations> isFocusedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isFocused');
     });
   }
 

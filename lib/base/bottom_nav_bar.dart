@@ -40,13 +40,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ? null
             : [
                 IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.addTaskScreen);
-                    },
-                    icon: const Icon(
-                      FluentSystemIcons.ic_fluent_add_circle_regular,
-                      size: 30,
-                    ))
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.addTaskScreen);
+                  },
+                  icon: const Icon(
+                    FluentSystemIcons.ic_fluent_add_circle_regular,
+                    size: 30,
+                  ),
+                )
               ],
       ),
       body: appScreens[_selectedIndex],

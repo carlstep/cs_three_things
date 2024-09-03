@@ -22,7 +22,11 @@ class Task {
   late List<String> taskTags;
   // taskPriority
 
-  @Enumerated(EnumType.value) //EnumType.value or Enum.Type.name??
+  // is task focused
+  @Index(composite: [CompositeIndex('taskName')])
+  bool isFocused = false;
+
+  @Enumerated(EnumType.name) //EnumType.value or Enum.Type.name??
   PriorityEnum? taskPriority;
   // task area
   late String taskArea;
