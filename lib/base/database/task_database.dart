@@ -11,6 +11,8 @@ class TaskDatabase extends ChangeNotifier {
   // declares a static late variable 'isar', which holds the reference to the Isar database
 
   final List<Task> _allTasks = [];
+
+  final List<Task> _focusTaskList = [];
   // _allTasks is a private list. Stores all Task objects from the Isar db
 
   // SETUP
@@ -29,6 +31,8 @@ class TaskDatabase extends ChangeNotifier {
   // GETTER METHODS
   // getter for all tasks
   List<Task> get allTasks => _allTasks;
+
+  List<Task> get focusTaskList => _focusTaskList;
 
   // OPERATIONS
 
@@ -57,16 +61,27 @@ class TaskDatabase extends ChangeNotifier {
 
   // - read tasks
   Future<void> readTasks() async {
-    // fetch all existing tasks, sort by dueDate
-    // List<Task> fetchedTasks =
-    //     await isar.tasks.where().sortByDueDate().findAll();
-
+    // fetch all existing tasks, sortByTaskPriority()
     List<Task> fetchedTasks =
         await isar.tasks.where().sortByTaskPriority().findAll();
 
     // clear all expenses list and add
     _allTasks.clear();
     _allTasks.addAll(fetchedTasks);
+
+    // update UI
+    notifyListeners();
+  }
+
+  // read
+  Future<void> readFocusTasks() async {
+    final focusTasks =
+        await isar.tasks.filter().isFocusedEqualTo(true).findAll();
+
+    _focusTaskList.clear();
+    _focusTaskList.addAll(focusTasks);
+
+    print(focusTasks);
 
     // update UI
     notifyListeners();
@@ -114,6 +129,9 @@ class TaskDatabase extends ChangeNotifier {
     notifyListeners();
   }
 
+  // function to set focus status of a task
+  // TODO - can only set max of 3 tasks for the focus list
+
   Future<void> updateTaskFocus(int id, bool isFocused) async {
     final task = await isar.tasks.get(id);
 
@@ -127,6 +145,7 @@ class TaskDatabase extends ChangeNotifier {
       notifyListeners();
 
       await readTasks();
+      await readFocusTasks();
     }
   }
 }

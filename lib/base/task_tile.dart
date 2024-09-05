@@ -60,7 +60,7 @@ class _TaskTileState extends State<TaskTile> {
         children: [
           // mark task for focus screen
           SlidableAction(
-            autoClose: false,
+            autoClose: true,
             padding: const EdgeInsets.all(0),
             spacing: 0,
             // onPressed - moves the selected task to the focus list

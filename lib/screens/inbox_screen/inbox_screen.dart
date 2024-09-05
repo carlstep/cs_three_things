@@ -35,9 +35,9 @@ class _InboxScreenState extends State<InboxScreen> {
     Provider.of<TaskDatabase>(context, listen: false)
         .updateTaskFocus(task.id, isFocused);
 
-    setState(() {
-      isFocused = true;
-    });
+    // setState(() {
+    //   isFocused = true;
+    // });
   }
 
   void _deleteExistingTask(Task task) {
